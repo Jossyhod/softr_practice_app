@@ -50,13 +50,14 @@ export default function RegistrationForm({
     params.append("submitted_at", new Date().toISOString());
 
     try {
-      const res = await fetch(webhookUrl, {
+      await fetch(webhookUrl, {
         method: "POST",
+        mode: "no-cors",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: params.toString(),
       });
 
-      if (!res.ok) throw new Error();
+      // no-cors returns an opaque response (can't read status), so we assume success
 
       setSubmitted(true);
 
@@ -103,7 +104,6 @@ export default function RegistrationForm({
         footer={null}
         width={520}
         centered
-        destroyOnHidden
         className="reg-modal"
         styles={{
           content: {
