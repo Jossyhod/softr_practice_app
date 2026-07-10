@@ -3,7 +3,7 @@ import RegistrationForm from './Component/RegistrationForm'; // ✅ Updated path
 
 // Use an environment variable for your Zapier webhook (recommended).
 // For Vite, create a .env file with: VITE_ZAPIER_WEBHOOK_URL=https://hooks.zapier.com/hooks/catch/xxxx/yyyy
-const ZAPIER_WEBHOOK_URL = import.meta.env.VITE_ZAPIER_WEBHOOK_URL || 'https://hooks.zapier.com/hooks/catch/25351507/u8zfnm8/';
+const ZAPIER_WEBHOOK_URL = import.meta.env.VITE_ZAPIER_WEBHOOK_URL || 'https://hooks.zapier.com/hooks/catch/28147668/4uaqcs6/';
 
 export default function App() {
   return (

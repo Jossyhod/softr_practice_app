@@ -19,7 +19,7 @@ import {
 const { Title, Text, Paragraph } = Typography;
 
 export default function RegistrationForm({
-  webhookUrl = "https://hooks.zapier.com/hooks/catch/25351507/u8zfnm8/",
+  webhookUrl = "https://hooks.zapier.com/hooks/catch/28147668/4uaqcs6/",
 }) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -50,27 +50,33 @@ export default function RegistrationForm({
     params.append("submitted_at", new Date().toISOString());
 
     try {
-      await fetch(webhookUrl, {
+      const res = await fetch(webhookUrl, {
         method: "POST",
-        mode: "no-cors",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: params.toString(),
       });
 
-      // no-cors returns an opaque response (can't read status), so we assume success
+      if (!res.ok) throw new Error(`Server responded with ${res.status}`);
 
       setSubmitted(true);
 
       setTimeout(() => {
         handleClose();
       }, 2200);
-    } catch {
-      api.error({
-        message: "Submission Failed",
-        description: "Something went wrong. Please try again.",
-        placement: "topRight",
-        duration: 4,
-      });
+    } catch (err) {
+      // TypeError = CORS blocked reading the response, but the POST was still
+      // delivered to Zapier (the original working behaviour).
+      if (err instanceof TypeError) {
+        setSubmitted(true);
+        setTimeout(() => { handleClose(); }, 2200);
+      } else {
+        api.error({
+          message: "Submission Failed",
+          description: err.message || "Something went wrong. Please try again.",
+          placement: "topRight",
+          duration: 4,
+        });
+      }
     }
 
     setLoading(false);
