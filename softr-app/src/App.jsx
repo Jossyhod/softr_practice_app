@@ -1,84 +1,147 @@
-import React from 'react';
-import RegistrationForm from './Component/RegistrationForm'; // ✅ Updated path since it's directly in src
+import { useState } from 'react';
+import { ArrowRight, Rocket, SlidersHorizontal, Sparkles, Zap } from 'lucide-react';
+import RegistrationForm from './Component/RegistrationForm';
 
 // Use an environment variable for your Zapier webhook (recommended).
 // For Vite, create a .env file with: VITE_ZAPIER_WEBHOOK_URL=https://hooks.zapier.com/hooks/catch/xxxx/yyyy
 const ZAPIER_WEBHOOK_URL = import.meta.env.VITE_ZAPIER_WEBHOOK_URL || 'https://hooks.zapier.com/hooks/catch/28147668/4uaqcs6/';
 
-export default function App() {
+const FEATURES = [
+  { icon: <Zap size={22} />, title: 'Fast to set up', body: 'Vite + React means instant dev server and hot reload.' },
+  { icon: <SlidersHorizontal size={22} />, title: 'Customizable', body: 'Change styles, add images or extend with components.' },
+  { icon: <Rocket size={22} />, title: 'Deploy easily', body: 'Deploy to Vercel, Netlify, or GitHub Pages in minutes.' },
+];
+
+function Brand() {
   return (
-    <div>
+    <a href="#top" className="brand" aria-label="Beyond Age Tech home">
+      <span className="brand-mark" aria-hidden="true">B</span>
+      <span>
+        Beyond Age Tech<span className="dot">.</span>
+      </span>
+    </a>
+  );
+}
+
+export default function App() {
+  const [signup, setSignup] = useState({ open: false, email: '' });
+
+  const openSignup = (email = '') => setSignup({ open: true, email });
+  const closeSignup = () => setSignup((s) => ({ ...s, open: false }));
+
+  // The email capture hands off to the real registration modal, pre-filled.
+  const handleEmailSubmit = (e) => {
+    e.preventDefault();
+    openSignup(new FormData(e.currentTarget).get('email'));
+  };
+
+  return (
+    <div id="top">
+      <a href="#main" className="skip-link">Skip to content</a>
+
       <header className="site-header">
         <div className="container header-inner">
-          <h1 className="logo">
-            Beyond Age Tech<span className="dot">.</span>
-          </h1>
-          <nav>
-            <a href="#features">Features</a>
-            <a href="#pricing">Pricing</a>
-            <a href="#contact">Contact</a>
+          <Brand />
+          <nav className="site-nav" aria-label="Primary">
+            <a href="#features" className="nav-link">Features</a>
+            <a href="#signup" className="nav-link">Sign up</a>
+            <button type="button" className="btn btn-primary btn-sm" onClick={() => openSignup()}>
+              Get started
+            </button>
           </nav>
         </div>
       </header>
 
-      <main>
+      <main id="main">
         <section className="hero">
           <div className="container">
-            <h2>Build better workflows — faster</h2>
+            <span className="eyebrow">
+              <span className="eyebrow-icon" aria-hidden="true">
+                <Sparkles size={13} strokeWidth={2.5} />
+              </span>
+              Free to get started
+            </span>
+
+            <h1>
+              Build better workflows&nbsp;— <span className="highlight">faster</span>
+            </h1>
             <p className="lead">
               Launch a simple landing page quickly. Perfect for testing ideas or demoing concepts.
             </p>
 
             <div className="cta-row">
-              {/* RegistrationForm renders the 'Get Started — It's Free' button and modal */}
-              <RegistrationForm webhookUrl={ZAPIER_WEBHOOK_URL} />
-
-              <a href="#features" className="btn ghost">
-                See Features
+              <button type="button" className="btn btn-primary" onClick={() => openSignup()}>
+                Get started free
+                <ArrowRight className="btn-arrow" size={18} aria-hidden="true" />
+              </button>
+              <a href="#features" className="btn btn-secondary">
+                See features
               </a>
             </div>
           </div>
         </section>
 
-        <section id="features" className="features container">
-          <h3>Features</h3>
-          <div className="grid">
-            <div className="card">
-              <div className="icon">⚡</div>
-              <h4>Fast to set up</h4>
-              <p>Vite + React means instant dev server and hot reload.</p>
+        <section id="features" className="section features" aria-labelledby="features-title">
+          <div className="container">
+            <div className="section-head">
+              <p className="section-eyebrow">Features</p>
+              <h2 id="features-title">Everything you need to ship</h2>
+              <p>Go from idea to live page without the setup headaches.</p>
             </div>
-            <div className="card">
-              <div className="icon">🔧</div>
-              <h4>Customizable</h4>
-              <p>Change styles, add images or extend with components.</p>
-            </div>
-            <div className="card">
-              <div className="icon">🚀</div>
-              <h4>Deploy easily</h4>
-              <p>Deploy to Vercel, Netlify, or GitHub Pages in minutes.</p>
-            </div>
+
+            <ul className="feature-grid">
+              {FEATURES.map(({ icon, title, body }) => (
+                <li key={title} className="feature-card">
+                  <span className="feature-icon" aria-hidden="true">
+                    {icon}
+                  </span>
+                  <h3>{title}</h3>
+                  <p>{body}</p>
+                </li>
+              ))}
+            </ul>
           </div>
         </section>
 
-        <section id="signup" className="signup">
+        <section id="signup" className="signup" aria-labelledby="signup-title">
           <div className="container">
-            <h3>Ready to try?</h3>
-            <p>Enter your email to be notified (this demo doesn't send emails).</p>
+            <div className="cta-panel">
+              <h2 id="signup-title">Ready to try?</h2>
+              <p>Enter your email and we&rsquo;ll take you straight to sign-up. It&rsquo;s free.</p>
 
-            <form onSubmit={(e) => e.preventDefault()} className="signup-form">
-              <input type="email" placeholder="you@example.com" aria-label="Email" />
-              <button className="btn primary">Notify me</button>
-            </form>
+              <form onSubmit={handleEmailSubmit} className="cta-form">
+                <label htmlFor="cta-email" className="sr-only">Email address</label>
+                <input
+                  id="cta-email"
+                  name="email"
+                  type="email"
+                  placeholder="you@example.com"
+                  autoComplete="email"
+                  required
+                />
+                <button type="submit" className="btn btn-primary">
+                  Get started
+                  <ArrowRight className="btn-arrow" size={18} aria-hidden="true" />
+                </button>
+              </form>
+            </div>
           </div>
         </section>
       </main>
 
-      <footer id="contact" className="site-footer">
-        <div className="container">
-          <p>© {new Date().getFullYear()} Beyond-Age Tech Solution</p>
+      <footer className="site-footer">
+        <div className="container footer-inner">
+          <Brand />
+          <p className="footer-copy">© {new Date().getFullYear()} Beyond-Age Tech Solution</p>
         </div>
       </footer>
+
+      <RegistrationForm
+        open={signup.open}
+        initialEmail={signup.email}
+        onClose={closeSignup}
+        webhookUrl={ZAPIER_WEBHOOK_URL}
+      />
     </div>
   );
 }
