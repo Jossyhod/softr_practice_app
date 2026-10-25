@@ -64,7 +64,7 @@ export default function RegistrationForm({
   open,
   onClose,
   initialEmail = "",
-  webhookUrl = "https://hooks.zapier.com/hooks/catch/28147668/4uaqcs6/",
+  webhookUrl,
 }) {
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -86,6 +86,16 @@ export default function RegistrationForm({
   };
 
   const handleSubmit = async (values) => {
+    if (!webhookUrl) {
+      api.error({
+        title: "Sign-up unavailable",
+        description: "Registration isn't configured yet. Please try again later.",
+        placement: "topRight",
+        duration: 4,
+      });
+      return;
+    }
+
     setLoading(true);
 
     const params = new URLSearchParams();

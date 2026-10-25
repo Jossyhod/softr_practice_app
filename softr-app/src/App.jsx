@@ -2,9 +2,8 @@ import { useState } from 'react';
 import { ArrowRight, Rocket, SlidersHorizontal, Sparkles, Zap } from 'lucide-react';
 import RegistrationForm from './Component/RegistrationForm';
 
-// Use an environment variable for your Zapier webhook (recommended).
-// For Vite, create a .env file with: VITE_ZAPIER_WEBHOOK_URL=https://hooks.zapier.com/hooks/catch/xxxx/yyyy
-const ZAPIER_WEBHOOK_URL = import.meta.env.VITE_ZAPIER_WEBHOOK_URL || 'https://hooks.zapier.com/hooks/catch/28147668/4uaqcs6/';
+// Set in softr-app/.env (not committed) — see .env.example.
+const ZAPIER_WEBHOOK_URL = import.meta.env.VITE_ZAPIER_WEBHOOK_URL;
 
 const FEATURES = [
   { icon: <Zap size={22} />, title: 'Fast to set up', body: 'Vite + React means instant dev server and hot reload.' },
