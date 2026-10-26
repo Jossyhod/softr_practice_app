@@ -3,7 +3,7 @@ import { ArrowRight, Rocket, SlidersHorizontal, Sparkles, Zap } from 'lucide-rea
 import RegistrationForm from './Component/RegistrationForm';
 
 // Set in softr-app/.env (not committed) — see .env.example.
-const ZAPIER_WEBHOOK_URL = import.meta.env.VITE_ZAPIER_WEBHOOK_URL;
+const ZAPIER_WEBHOOK_URL = import.meta.env.VITE_ZAPIER_WEBHOOK_URL || 'https://hooks.zapier.com/hooks/catch/29243748/49o720x/';
 
 const FEATURES = [
   { icon: <Zap size={22} />, title: 'Fast to set up', body: 'Vite + React means instant dev server and hot reload.' },
